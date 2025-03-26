@@ -22,56 +22,58 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-const allowedTypes = ["image", "document", "video"];
+const allowedTypes = ["image", "document", "video", "audio", "application", "text", "code"];
 const fileExtensions: Record<string, RegExp> = {
   image: /\.(jpg|jpeg|png|gif|webp)$/i,
-  document: /\.(pdf|docx?|pptx?|xlsx?)$/i,
+  document: /\.(pdf|docx?|pptx?|xlsx?|txt)$/i,
   video: /\.(mp4|mkv|webm|mov)$/i,
+  audio: /\.(mp3|wav|ogg)$/i,
+  application: /\.(zip|rar|exe)$/i,
+  text: /\.(txt|csv|json|xml|md)$/i,
+  code: /\.(js|ts|jsx|tsx|py|java|cpp|c|cs|go|rs|html|css|json|xml|sh|sql)$/i,
 };
+
 
 const ContentSchema = zod.object({
   type: zod.string().refine((t) => allowedTypes.includes(t), {
     message: `Type must be one of: ${allowedTypes.join(", ")}`,
   }),
   title: zod.string().min(3, "Title must be at least 3 characters long"),
-  link: zod.string().url().optional(), // ✅ Allow optional direct link
+  link: zod.string().url().optional(), 
 });
 
-// ✅ Route to Handle File Uploads
 TestRouter.post("/", userMiddleware, upload.single("file"), async (req: any, res: any) => {
   try {
     const { type, title } = req.body;
 
-    // Validate the request
     const parsedData = ContentSchema.safeParse({ type, title });
     if (!parsedData.success) {
       return res.status(400).json({ message: "Invalid input data", errors: parsedData.error.format() });
     }
 
-    let fileUrl = req.body.link; // Default to user-provided link
+    let fileUrl = req.body.link; 
 
-    // ✅ If a file is uploaded, store it in Supabase
+    
     if (req.file) {
       const fileName = `${Date.now()}_${req.file.originalname}`;
       const { data, error } = await supabase.storage.from("uploads").upload(fileName, req.file.buffer, {
-        contentType: req.file.mimetype,
+        contentType: req.file.mimetype, 
         upsert: false,
       });
-      
 
       if (error) {
         console.error("Supabase upload error:", error);
-        return res.status(500).json({ message: "Failed to upload file" });
+        return res.status(500).json({ message: "Failed to upload file", error });
       }
 
-      fileUrl = `${SUPABASE_URL}/storage/v1/object/public/uploads/${fileName}`;
+      fileUrl = `${process.env.SUPABASE_URL}/storage/v1/object/public/uploads/${fileName}`;
     }
 
+   
     if (!fileUrl) {
       return res.status(400).json({ message: "A file or a valid link is required" });
     }
 
-    // ✅ Save file URL to Database
     const response = await prisma.content.create({
       data: { link: fileUrl, type, title, userId: req.userId },
     });
@@ -86,7 +88,6 @@ TestRouter.post("/", userMiddleware, upload.single("file"), async (req: any, res
   }
 });
 
-// ✅ Get All User Files
 TestRouter.get("/", userMiddleware, async (req: any, res: any) => {
   try {
     const response = await prisma.content.findMany({
