@@ -101,22 +101,22 @@ TestRouter.get("/", userMiddleware, async (req: any, res: any) => {
   }
 });
 
-// ✅ Delete File (From DB & Storage)
+
 TestRouter.delete("/", async (req: any, res: any) => {
   try {
     const { contentId } = req.body;
 
-    // Fetch existing content
+ 
     const content = await prisma.content.findUnique({ where: { id: contentId } });
     if (!content) return res.status(404).json({ message: "Content not found" });
 
-    // Delete from Supabase Storage
+
     const filePath = content.link.split("/storage/v1/object/public/uploads/")[1];
     if (filePath) {
       await supabase.storage.from("uploads").remove([filePath]);
     }
 
-    // Delete from DB
+
     await prisma.content.delete({ where: { id: contentId } });
 
     return res.status(200).json({ message: "Item Deleted Successfully" });
