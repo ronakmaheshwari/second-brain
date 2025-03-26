@@ -9,12 +9,16 @@ const TestRouter = express.Router();
 const prisma = new PrismaClient();
 TestRouter.use(express.json());
 
-// ✅ Initialize Supabase Client
+
 const SUPABASE_URL = "https://xntcmbrnuyvzjeupfbyt.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhudGNtYnJudXl2empldXBmYnl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5MjMzMDQsImV4cCI6MjA1ODQ5OTMwNH0.hH3W-O4G_byuPfaaU3fkIRvwcPGMA6h_4vLw4xGQDjw" ;
+const SUPABASE_KEY = process.env.SUPABASE_KEY ;
+
+if (!SUPABASE_KEY) {
+  throw new Error("SUPABASE_KEY is not defined");
+}
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ✅ Multer Setup for File Uploads
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
