@@ -9,12 +9,13 @@ const userRouter = express.Router();
 const prisma = new PrismaClient();
 
 const SignupSchema = zod.object({
-    username:zod.string().min(3).max(10),
-    password:zod.string().min(8).max(20)
+    username:zod.string(),
+    password:zod.string().min(6)
 })
 
 userRouter.post("/signup",async(req:any,res:any)=>{
     try{
+        console.log(req.body);
         const {success} = SignupSchema.safeParse(req.body);
         if(!success){
             return res.status(404).json({
@@ -43,7 +44,7 @@ userRouter.post("/signup",async(req:any,res:any)=>{
             }
         })
         const id = newUser.id; 
-        var token = jwt.sign({id: id }, jwtsecret);
+        var token = jwt.sign({id: id}, jwtsecret);
         return res.status(200).json({ 
             message:"User Successfully Added",
             token:token 
@@ -93,4 +94,4 @@ userRouter.post("/signin",async(req:any,res:any)=>{
     }
 })
 
-export default userRouter;
+export {userRouter};

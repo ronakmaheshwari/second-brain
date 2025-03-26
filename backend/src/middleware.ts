@@ -2,16 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { jwtsecret } from "./index.js";
 
-if (!jwtsecret) {
-  throw new Error("JWT_SECRET is not defined in environment variables");
-}
-
-declare module "express-serve-static-core" {
-  interface Request {
-    userId?: number;
-  }
-}
-
 export const userMiddleware = (req: any, res: any, next: NextFunction) => {
   try {
     const authHeader = req.headers["authorization"];

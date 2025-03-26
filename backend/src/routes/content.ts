@@ -1,117 +1,81 @@
-import express from "express";
-import zod from "zod";
-import multer from "multer";
+import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { createClient } from "@supabase/supabase-js";
+import zod from "zod";
 import { userMiddleware } from "../middleware.js";
 
-const supabaseUrl = "https://xntcmbrnuyvzjeupfbyt.supabase.co";
-const supabaseKey = process.env.SUPABASE_KEY;
-
-if (!supabaseKey) {
-  throw new Error("SUPABASE_KEY is not defined in the environment variables");
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey);
-const prisma = new PrismaClient();
 const contentRouter = express.Router();
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
-
-const contentTypes = ["image", "video", "article", "audio", "document"] as const;
+const prisma = new PrismaClient();
+contentRouter.use(express.json()); 
 
 const ContentSchema = zod.object({
-  link: zod.string().url().optional(),
-  type: zod.enum(contentTypes),
-  title: zod.string().min(1, "Title is required"),
-  tags: zod.array(zod.string()).optional(),
+  link: zod.string().url(),
+  type: zod.string(),
+  title: zod.string(),
 });
 
-
-async function uploadFileToSupabase(file: Express.Multer.File, type: string) {
-  const fileExt = file.originalname.split(".").pop();
-  const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-  const bucket = type === "image" ? "images" : "documents"; 
-
-  const { data, error } = await supabase.storage.from(bucket).upload(fileName, file.buffer, {
-    contentType: file.mimetype,
-    upsert: true,
-  });
-
-  if (error) throw new Error(`Upload failed: ${error.message}`);
-
-  return `${supabaseUrl}/storage/v1/object/public/${bucket}/${fileName}`;
-}
-
-contentRouter.post("/", upload.single("file"), userMiddleware ,async (req: any, res: any) => {
+contentRouter.post("/", userMiddleware, async (req: any, res: any) => {
   try {
-    const { type, title, tags } = req.body;
-    const file = req.file;
+    console.log(req.body);
+    const parsedData = ContentSchema.safeParse(req.body);
+    console.log(req.body);
 
-    if (!contentTypes.includes(type)) {
-      return res.status(400).json({ message: "Invalid content type" });
+    if (!parsedData.success) {
+      return res.status(400).json({
+        message: "Invalid input data",
+        errors: parsedData.error.format(),
+      });
     }
 
-    let link = req.body.link;
+    const { link, type, title } = parsedData.data;
 
-    if (file) {
-      if (type !== "image" && type !== "document") {
-        return res.status(400).json({ message: "Only images or documents can be uploaded" });
-      }
-      link = await uploadFileToSupabase(file, type);
-    }
-
-    if (!link) {
-      return res.status(400).json({ message: "Either provide a link or upload a file" });
-    }
-
-    const id = req.userId; // Assuming middleware adds this
-    await prisma.content.create({
+    const response = await prisma.content.create({
       data: {
         link,
         type,
         title,
-        tags,
-        userId: id,
+        userId: req.userId, // Ensure `req.userId` is coming from `userMiddleware`
       },
     });
 
-    return res.status(200).json({ message: "Content Successfully Added" });
+    return res.status(201).json({
+      message: "Data added successfully",
+      content: response,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Error creating content:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-
-contentRouter.get("/", userMiddleware ,async (req: any, res: any) => {
+// ✅ No need to modify GET and DELETE routes since they do not use 'tags'
+contentRouter.get("/", userMiddleware, async (req: any, res: any) => {
   try {
-    const id = req.userId;
     const response = await prisma.content.findMany({
-      where: { userId: id },
+      where: { userId: req.userId },
     });
 
-    return res.status(200).json({ content: response });
+    return res.status(200).json({ response });
   } catch (error) {
+    console.error("Error fetching content:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-contentRouter.delete("/",userMiddleware,async (req: any, res: any)=>{
-    try{
-        const contentId = req.body.contentId;
-        const response  = await prisma.content.delete({
-            where:{
-                id:contentId
-            }
-        })
-        return res.status(200).json({
-            message:"Content Deleted"
-        })
-    }catch (error) {
-        return res.status(500).json({ message: "Internal Server Error" });
-    }
-})
+contentRouter.delete("/", async (req: any, res: any) => {
+  try {
+    const { contentId } = req.body;
+
+    await prisma.content.delete({
+      where: { id: contentId },
+    });
+
+    return res.status(200).json({
+      message: "Item Deleted Successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting content:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 export { contentRouter };
