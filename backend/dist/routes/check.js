@@ -70,9 +70,13 @@ TestRouter.post("/", userMiddleware, upload.single("file"), async (req, res) => 
 });
 TestRouter.get("/", userMiddleware, async (req, res) => {
     try {
+        const typeFilter = req.query.filter || "";
         const response = await prisma.content.findMany({
-            where: { userId: req.userId },
+            where: typeFilter ? { type: typeFilter, userId: req.userId } : { userId: req.userId }
         });
+        // const response = await prisma.content.findMany({
+        //   where: { userId: req.userId },
+        // });
         return res.status(200).json({ response });
     }
     catch (error) {
