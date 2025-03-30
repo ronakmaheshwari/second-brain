@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Card from "./Card";
 import axios from "axios";
 import SkeletonCard from "./SkeletonCard";
+import { Backend_Url } from "../../config";
 
 interface ContentSchema {
     id: string;
@@ -14,29 +15,35 @@ export default function Contents() {
     const [content, setContent] = useState<ContentSchema[]>([]);
     const [loading, setLoading] = useState(true); 
 
+    const fetchData = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const response = await axios.get<{ response: ContentSchema[] }>(
+                `${Backend_Url}/content/`,
+                {
+                    headers: {
+                        Authorization: token ? `Bearer ${token}` : "",
+                    },
+                }
+            );
+
+            setContent(response.data.response ?? []);
+        } catch (error) {
+            console.error("Error fetching content:", error);
+        } finally {
+            setLoading(false); 
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem("token");
-
-                const response = await axios.get<{ response: ContentSchema[] }>(
-                    "http://localhost:3000/api/v1/content/",
-                    {
-                        headers: {
-                            Authorization: token ? `Bearer ${token}` : "",
-                        },
-                    }
-                );
-
-                setContent(response.data.response ?? []);
-            } catch (error) {
-                console.error("Error fetching content:", error);
-            } finally {
-                setLoading(false); 
-            }
-        };
-
         fetchData();
+        const interval = setInterval(()=>{
+            fetchData()
+        },10 * 1000);
+        return () =>{
+            clearInterval(interval);
+        }
     }, []);
 
     return (

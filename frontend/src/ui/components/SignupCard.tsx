@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Bounce, toast } from "react-toastify";
 import InputBox from "./Inputbox";
+import { Backend_Url } from "../../config";
 
 export default function SignupCard({ type }: { type: "signup" | "signin" }) {
   const [username, setUsername] = useState("");  
@@ -12,7 +13,7 @@ export default function SignupCard({ type }: { type: "signup" | "signin" }) {
 
   const sendSignup = useCallback(async () => {
     try {
-      const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
+      const response = await axios.post(`${Backend_Url}/user/signup`, {
         username,
         password,  
       });
@@ -49,7 +50,7 @@ export default function SignupCard({ type }: { type: "signup" | "signin" }) {
 
   const sendSignin = useCallback(async () => {
     try {
-      const response = await axios.post("http://localhost:3000/api/v1/user/signin", {
+      const response = await axios.post(`${Backend_Url}/user/signin`, {
         username,
         password, 
       });

@@ -5,6 +5,7 @@ import CrossIcon from "./CrossIcon";
 import Dropzone from "./Dropzone";
 import { toast } from "react-toastify";
 import InputBox from "./Inputbox";
+import { Backend_Url } from "../../config";
 
 interface ModalProps {
     open: boolean;
@@ -29,35 +30,48 @@ export default function CreateModal({ open, onClose }: ModalProps) {
         if ((selectedType === "tweet" || selectedType === "link") && !link.trim()) {
             return toast.error("A valid link is required!");
         }
-
+    
         setLoading(true);
-
+    
         try {
-            // let fileUrl = link || null;
-            const formData = new FormData();
-
-            if (file) {
-                formData.append("file", file);
-            }
-            formData.append("title", title);
-            formData.append("type", selectedType);
-
+            let response;
+    
             const token = localStorage.getItem("token");
-
-            const response = await axios.post(
-                "http://localhost:3000/api/v1/content/",
-                formData,
-                {
-                    headers: {
-                        Authorization: token ? `Bearer ${token}` : "",
-                        "Content-Type": file ? "multipart/form-data" : "application/json"
+    
+            if (selectedType === "tweet" || selectedType === "link") {
+               
+                response = await axios.post(
+                    `${Backend_Url}/content/`,
+                    { title, type: selectedType, link },
+                    {
+                        headers: {
+                            Authorization: token ? `Bearer ${token}` : "",
+                            "Content-Type": "application/json"
+                        }
                     }
-                }
-            );
-
+                );
+            } else {
+                // Handle file uploads with FormData
+                const formData = new FormData();
+                if (file) formData.append("file", file);
+                formData.append("title", title);
+                formData.append("type", selectedType);
+    
+                response = await axios.post(
+                    `${Backend_Url}/content/`,
+                    formData,
+                    {
+                        headers: {
+                            Authorization: token ? `Bearer ${token}` : "",
+                            "Content-Type": "multipart/form-data"
+                        }
+                    }
+                );
+            }
+    
             toast.success("Uploaded successfully!");
             console.log("Upload Success:", response.data);
-
+    
             setTitle("");
             setLink("");
             setFile(null);
@@ -69,6 +83,7 @@ export default function CreateModal({ open, onClose }: ModalProps) {
             setLoading(false);
         }
     };
+    
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">

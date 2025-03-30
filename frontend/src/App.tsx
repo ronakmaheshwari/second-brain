@@ -10,6 +10,7 @@ import Documents from './ui/pages/document';
 import Links from './ui/pages/link';
 import Code from './ui/pages/code';
 import AudioPage from './ui/pages/audio';
+import SharePage from './ui/pages/SharePage';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path='/video' element={<Video />} />
           <Route path='/text' element={<Video />} />
           <Route path='/audio' element={<AudioPage />} />
+          <Route path='/share/:shareLink' element={<SharePage />} />
         </Routes>
       </BrowserRouter>
     </div> 

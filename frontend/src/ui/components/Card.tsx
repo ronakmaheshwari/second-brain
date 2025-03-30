@@ -3,6 +3,7 @@ import CardHeader from "./CardHeader";
 import { Download } from "lucide-react";
 import axios from "axios";
 import { Bounce, toast } from "react-toastify";
+import { Backend_Url } from "../../config";
 
 interface CardSchema {
     id: string; 
@@ -18,13 +19,13 @@ export default function Card({ id, title, type, link }: CardSchema) {
         try {
             const token = localStorage.getItem("token");
     
-            await axios.delete(`http://localhost:3000/api/v1/content/`, { 
-                data: { contentId: id },  
+            await axios.delete(`${Backend_Url}/content/`, {
+                data: { contentId: id }, 
                 headers: {
                     Authorization: token ? `Bearer ${token}` : "",
-                    "Content-Type": "application/json",
                 },
             });
+            
     
             toast.success("Deleted Content Successfully!", {  
                 position: "top-center",

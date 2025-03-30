@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Card from "./Card";
 import axios from "axios";
 import SkeletonCard from "./SkeletonCard";
+import { Backend_Url } from "../../config";
 
 interface ContentSchema {
     id: string;
@@ -20,7 +21,7 @@ export default function FilterCard({filter}:{filter:string}) {
                 const token = localStorage.getItem("token");
 
                 const response = await axios.get<{ response: ContentSchema[] }>(
-                    `http://localhost:3000/api/v1/content/?filter=${filter}`,
+                    `${Backend_Url}/content/?filter=${filter}`,
                     {
                         headers: {
                             Authorization: token ? `Bearer ${token}` : "",
