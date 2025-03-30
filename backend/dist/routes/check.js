@@ -15,7 +15,7 @@ if (!SUPABASE_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-const allowedTypes = ["image", "document", "video", "audio", "application", "text", "code"];
+const allowedTypes = ["image", "document", "video", "audio", "application", "text", "code", "tweet", "link"];
 const fileExtensions = {
     image: /\.(jpg|jpeg|png|gif|webp)$/i,
     document: /\.(pdf|docx?|pptx?|xlsx?|txt)$/i,

@@ -13,7 +13,7 @@ export default function Button({ variant, size, title, onClick, startIcon, endIc
   const baseStyles = "flex items-center justify-center font-bold rounded-md transition-all duration-300";
   const variantStyles = variant === "primary" 
     ? "bg-indigo-600 text-blue-100 hover:bg-indigo-800 text-blue-50"  
-    : "bg-indigo-200 text-indigo-800 hover:bg-indigo-300 text-indigo-400";
+    : "bg-indigo-200 text-indigo-600 hover:bg-indigo-300 text-indigo-400";
   
   const sizeStyles = {
     sm: "px-2 py-1 text-sm",
