@@ -53,7 +53,7 @@ export default function SharedContent({ filter }: { filter: string }) {
     return (
         <div className="w-full h-full max-h-[1000px] rounded-lg bg-slate-100 flex flex-col gap-4 p-5 overflow-auto">
             {username && (
-                <h2 className="text-xl font-bold text-center">Shared by {username}</h2>
+                <h2 className="text-xl font-bold text-center w-full h-16 bg-slate-100 text-gray-400">Shared by {username}</h2>
             )}
             {loading ? (
                 [...Array(4)].map((_, index) => <SkeletonCard key={index} />)
