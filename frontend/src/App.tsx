@@ -1,27 +1,47 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css'
-import ContentSide from './components/ui/ContentSide';
-import SideBar from './components/ui/SideBar'
-import Card from './components/ui/Card';
+import SignUp from './ui/pages/signup';
+import Dashboard from './ui/pages/dashboard';
+import { Bounce, ToastContainer } from 'react-toastify';
+import SignIn from './ui/pages/signin';
+import Tweets from './ui/pages/tweet';
+import Video from './ui/pages/video';
+import Documents from './ui/pages/document';
+import Links from './ui/pages/link';
+import Code from './ui/pages/code';
+import AudioPage from './ui/pages/audio';
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="flex w-screen h-screen overflow-hidden p-5 space-x-5">
-        <SideBar />
+    <div>
+      <ToastContainer
+          position="top-center"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          transition={Bounce}
+      />
+      <BrowserRouter>
         <Routes>
-          <Route path='/signup' element={<Card />} />
-          <Route path='/signin' element={<Card />} />
-          <Route path='/dashboard' element={<Card />} />
-          <Route path='/tweet' element={<Card />} />
-          <Route path='/links' element={<Card />} />
-          <Route path='/document' element={<Card />} />
-          <Route path='/code' element={<Card />} />
-          <Route path='/video' element={<Card />} />
+          <Route path='/signup' element={<SignUp />} />
+          <Route path='/signin' element={<SignIn />} />
+          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/tweet' element={<Tweets />} />
+          <Route path='/links' element={<Links />} />
+          <Route path='/document' element={<Documents />} />
+          <Route path='/code' element={<Code />} />
+          <Route path='/video' element={<Video />} />
+          <Route path='/text' element={<Video />} />
+          <Route path='/audio' element={<AudioPage />} />
         </Routes>
-        <ContentSide />
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </div> 
   );
 }
 

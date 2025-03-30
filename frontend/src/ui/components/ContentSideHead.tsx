@@ -1,15 +1,15 @@
+import React from "react";
 import Button from "./Button";
 
-export default function ContentSide() {
-    return (
-        <div className="flex flex-col w-full h-full shadow-lg bg-slate-50 p-4 rounded-lg">
-            <div className="flex w-full h-16 p-2 justify-between items-center gap-3 bg-slate-50">
-                <h1 className="text-2xl font-bold flex-grow">All Notes</h1>
+export default function ContentSideHead({title,onClick,onShareClick}:{title:string;onClick:(e: React.MouseEvent<HTMLElement>)=>void,onShareClick: (e: React.MouseEvent<HTMLElement>) => void}){
+    return(
+        <div className="flex w-full h-16 p-2 justify-between items-center gap-3 bg-slate-50">
+                <h1 className="text-2xl font-bold flex-grow">{title}</h1>
                 <Button 
                     variant="secondary" 
                     size="md" 
                     title="Share Content" 
-                    onClick={() => {}} 
+                    onClick={onShareClick} 
                     startIcon={
                         <svg 
                             xmlns="http://www.w3.org/2000/svg" 
@@ -26,7 +26,7 @@ export default function ContentSide() {
                     variant="primary" 
                     size="md" 
                     title="Add Content" 
-                    onClick={() => {}} 
+                    onClick={onClick} 
                     startIcon={
                         <svg 
                             xmlns="http://www.w3.org/2000/svg" 
@@ -40,6 +40,5 @@ export default function ContentSide() {
                     }
                 />
             </div>
-        </div>
-    );
+    )
 }

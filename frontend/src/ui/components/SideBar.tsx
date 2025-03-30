@@ -11,7 +11,7 @@ export default function SideBar() {
   
   return (
     <div className="w-[15%] h-full bg-white flex flex-col rounded-md shadow-lg p-5 overflow-y-auto">
-      <div className="flex items-center space-x-3 w-full pb-4 border-b">
+      <div className="flex items-center space-x-3 w-full pb-4 border-b " onClick={()=>{navigate("/dashboard")}}>
         <img
           src="https://img.icons8.com/ios/50/000000/brain--v1.png"
           alt="brain"
@@ -21,7 +21,7 @@ export default function SideBar() {
       </div>
 
       <div className="flex flex-col flex-grow mt-4 space-y-4">
-        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white">
+        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white" onClick={()=>{navigate("/tweet")}}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -42,7 +42,7 @@ export default function SideBar() {
           <h4 className="font-semibold text-md">Tweets</h4>
         </button>
 
-        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white">
+        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white" onClick={()=>{navigate("/video")}}  >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -60,7 +60,7 @@ export default function SideBar() {
           <h4 className="font-semibold text-md">Videos</h4>
         </button>
 
-        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white">
+        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white"  onClick={()=>{navigate("/document")}}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -78,7 +78,7 @@ export default function SideBar() {
           <h4 className="font-semibold text-md">Documents</h4>
         </button>
 
-        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white">
+        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white" onClick={()=>{navigate("/links")}}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -96,7 +96,7 @@ export default function SideBar() {
           <h4 className="font-semibold text-md">Links</h4>
         </button>
 
-        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white">
+        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white" onClick={()=>{navigate("/code")}}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -112,6 +112,35 @@ export default function SideBar() {
             />
           </svg>
           <h4 className="font-semibold text-md">Code</h4>
+        </button>
+
+        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white" onClick={()=>{navigate("/text")}}>
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+        </svg>
+
+          <h4 className="font-semibold text-md">Texts</h4>
+        </button>
+
+        <button className="w-full flex items-center gap-3 px-4 py-3 bg-white text-black rounded-md hover:bg-indigo-700 hover:text-white" onClick={()=>{navigate("/audio")}}>
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke-width="1.5" 
+          stroke="currentColor" 
+          className="size-6"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+        </svg>
+          <h4 className="font-semibold text-md">Audio</h4>
         </button>
       </div>
       <div className="mt-auto">
