@@ -3,7 +3,7 @@ import SideBar from "../components/SideBar";
 import SharedSide from "../components/SharedPage";
 
 export default function SharePage() {
-    const { shareLink } = useParams(); // Fetch shareLink from the URL
+    const { shareLink } = useParams(); 
 
     return (
         <div className="flex w-screen h-screen overflow-hidden p-5 space-x-5">
