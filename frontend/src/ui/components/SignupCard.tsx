@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SignupHeader from "./SignupHeader";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -83,17 +83,29 @@ export default function SignupCard({ type }: { type: "signup" | "signin" }) {
         transition: Bounce,
       });
     }
-  }, [username, password, navigate]);  
+  }, [username, password, navigate]);
+  
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      try {
+        await axios.get(`${Backend_Url}/user/hit`);
+      } catch (error) {
+        console.error("Error hitting user API:", error);
+      }
+    }, 10000);
+  
+    return () => clearTimeout(timeout); 
+  }, []);
 
   return (
     <div className="flex flex-col w-full max-w-md h-auto rounded-lg shadow-xl bg-white p-6 space-y-4">
       <SignupHeader />
       
       <InputBox
-        label="Username"
+        label="Email"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        placeholder="jedi"
+        placeholder="ronak@gmail.com"
       />
       
       <InputBox

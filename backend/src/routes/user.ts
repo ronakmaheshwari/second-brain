@@ -9,8 +9,8 @@ const userRouter = express.Router();
 const prisma = new PrismaClient();
 
 const SignupSchema = zod.object({
-    username:zod.string(),
-    password:zod.string().min(6)
+    username:zod.string().email(),
+    password:zod.string().min(8)
 })
 
 userRouter.post("/signup",async(req:any,res:any)=>{
@@ -90,6 +90,18 @@ userRouter.post("/signin",async(req:any,res:any)=>{
     }catch(error){
         return res.status(500).json({
             message:"Internal Server Error"
+        })
+    }
+})
+
+userRouter.get("/hit",async(req:any,res:any)=>{
+    try{
+        return res.status(200).json({
+            message:"Cold Start Hit Success"
+        })
+    }catch(error){
+        return res.status(500).json({
+            message:"Cold Server Error"
         })
     }
 })

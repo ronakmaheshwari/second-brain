@@ -7,8 +7,8 @@ import { PrismaClient } from "@prisma/client";
 const userRouter = express.Router();
 const prisma = new PrismaClient();
 const SignupSchema = zod.object({
-    username: zod.string(),
-    password: zod.string().min(6)
+    username: zod.string().email(),
+    password: zod.string().min(8)
 });
 userRouter.post("/signup", async (req, res) => {
     try {
@@ -82,6 +82,18 @@ userRouter.post("/signin", async (req, res) => {
     catch (error) {
         return res.status(500).json({
             message: "Internal Server Error"
+        });
+    }
+});
+userRouter.get("/hit", async (req, res) => {
+    try {
+        return res.status(200).json({
+            message: "Cold Start Hit Success"
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            message: "Cold Server Error"
         });
     }
 });
