@@ -86,15 +86,17 @@ export default function SignupCard({ type }: { type: "signup" | "signin" }) {
   }, [username, password, navigate]);
   
   useEffect(() => {
-    const timeout = setTimeout(async () => {
+    const warmUpBackend = async () => {
       try {
         await axios.get(`${Backend_Url}/user/hit`);
+        console.log("Backend warm-up successful");
       } catch (error) {
-        console.error("Error hitting user API:", error);
+        console.error("Backend warm-up failed:", error);
       }
-    }, 10000);
-  
-    return () => clearTimeout(timeout); 
+    };
+    warmUpBackend();
+    const intervalId = setInterval(warmUpBackend, 5 * 60 * 1000);
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
