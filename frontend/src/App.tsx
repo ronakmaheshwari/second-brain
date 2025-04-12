@@ -11,6 +11,7 @@ import Links from './ui/pages/link';
 import Code from './ui/pages/code';
 import AudioPage from './ui/pages/audio';
 import SharePage from './ui/pages/SharePage';
+import Landing from './ui/pages/Landing/Landing';
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
       />
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<SignUp />} />
+          <Route path='/' element={<Landing />} />
           <Route path='/signup' element={<SignUp />} />
           <Route path='/signin' element={<SignIn />} />
           <Route path='/dashboard' element={<Dashboard />} />

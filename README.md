@@ -26,7 +26,7 @@ Access your Second Brain from anywhere, at any time.
 ## 📡 API Reference
 
 - **Database & Authentication:** [Supabase](https://supabase.io/docs)
-- **Deployment:** [Vercel](https://vercel.com/docs) Render
+- **Deployment:** [Vercel](https://vercel.com/docs)   Render
 
 ## 🛠 Tech Stack
 
