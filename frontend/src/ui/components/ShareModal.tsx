@@ -35,7 +35,7 @@ export default function ShareModal({ open, onClose }: ModalProps) {
     };
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(`https://second-brain-pi-gilt.vercel.app/share/${link}`);
+        navigator.clipboard.writeText(`https://brain.10xdevs.me/share/${link}`);
     };
 
     if (!open) return null;
@@ -57,7 +57,7 @@ export default function ShareModal({ open, onClose }: ModalProps) {
                 {/* Link Box */}
                 {showBox && (
                     <div className="flex items-center justify-between w-full p-3 bg-gray-100 border border-gray-300 rounded-md text-gray-800 font-medium">
-                        <span className="truncate select-all">{`https://second-brain-pi-gilt.vercel.app/share/${link}`}</span>
+                        <span className="truncate select-all">{`https://brain.10xdevs.me/share/${link}`}</span>
                         <button
                             onClick={copyToClipboard}
                             className="ml-2 text-sm text-blue-600 hover:underline"

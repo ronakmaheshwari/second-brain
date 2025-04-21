@@ -112,7 +112,8 @@ export default function SignupCard({ type }: { type: "signup" | "signin" }) {
       
       <InputBox
         label="Password"
-        value={password}  
+        value={password}
+        type="password"  
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Pass@123"
       />
